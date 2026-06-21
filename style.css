@@ -1,0 +1,271 @@
+:root {
+  --bg: #0a0f0d;
+  --panel: #121a16;
+  --grid-line: #1b2620;
+  --snake-body: #4ade80;
+  --snake-head: #bbf7d0;
+  --food: #fbbf24;
+  --text-primary: #e8f5e9;
+  --text-muted: #6b7d72;
+  --danger: #f87171;
+  --glow-green: rgba(74, 222, 128, 0.55);
+
+  --font-display: 'Press Start 2P', monospace;
+  --font-body: 'JetBrains Mono', monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: radial-gradient(circle at 50% 0%, #101713 0%, var(--bg) 60%);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* CRT scanline + vignette effect, fixed over the whole screen */
+.crt-overlay {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: repeating-linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0) 0px,
+      rgba(0, 0, 0, 0) 2px,
+      rgba(0, 0, 0, 0.12) 3px,
+      rgba(0, 0, 0, 0) 4px
+    ),
+    radial-gradient(ellipse at center, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.55) 100%);
+  mix-blend-mode: multiply;
+}
+
+.arcade {
+  width: 100%;
+  max-width: 460px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+.arcade__header {
+  text-align: center;
+}
+
+.arcade__title {
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 4vw, 1.4rem);
+  line-height: 1.6;
+  margin: 0;
+  color: var(--text-primary);
+  text-shadow: 0 0 6px var(--glow-green), 0 0 18px var(--glow-green);
+  letter-spacing: 1px;
+}
+
+.arcade__title span {
+  color: var(--snake-body);
+}
+
+.arcade__subtitle {
+  margin: 6px 0 0;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.hud {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  background: var(--panel);
+  border: 2px solid var(--grid-line);
+  border-radius: 6px;
+  padding: 10px 18px;
+}
+
+.hud__stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hud__stat:last-child {
+  align-items: flex-end;
+}
+
+.hud__label {
+  font-size: 0.6rem;
+  color: var(--text-muted);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.hud__value {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--snake-body);
+  text-shadow: 0 0 8px var(--glow-green);
+}
+
+.board {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  max-width: 400px;
+  border-radius: 8px;
+  border: 3px solid var(--grid-line);
+  background: var(--panel);
+  box-shadow: 0 0 0 1px rgba(74, 222, 128, 0.08), 0 0 40px rgba(74, 222, 128, 0.08),
+    inset 0 0 30px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+}
+
+#gameCanvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  text-align: center;
+  background: rgba(8, 12, 10, 0.88);
+  backdrop-filter: blur(2px);
+  padding: 24px;
+  transition: opacity 0.2s ease;
+}
+
+.overlay--hidden {
+  display: none;
+}
+
+.overlay__title {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: var(--snake-body);
+  text-shadow: 0 0 10px var(--glow-green);
+  margin: 0;
+}
+
+.overlay__title--danger {
+  color: var(--danger);
+  text-shadow: 0 0 10px rgba(248, 113, 113, 0.6);
+}
+
+.overlay__text {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  max-width: 240px;
+}
+
+.btn {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  color: var(--bg);
+  background: var(--snake-body);
+  border: none;
+  border-radius: 4px;
+  padding: 12px 20px;
+  cursor: pointer;
+  box-shadow: 0 0 16px var(--glow-green);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 24px var(--glow-green);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--food);
+  outline-offset: 3px;
+}
+
+.hint {
+  margin: 0;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+/* On-screen D-pad, shown only on touch/small screens */
+.touch-controls {
+  display: none;
+  grid-template-columns: repeat(3, 56px);
+  grid-template-rows: repeat(2, 56px);
+  gap: 8px;
+  justify-content: center;
+}
+
+.touch-btn {
+  font-size: 1.1rem;
+  color: var(--snake-body);
+  background: var(--panel);
+  border: 2px solid var(--grid-line);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.touch-btn:active {
+  background: var(--grid-line);
+}
+
+.touch-btn--up {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.touch-btn--left {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.touch-btn--down {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+.touch-btn--right {
+  grid-column: 3;
+  grid-row: 2;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .touch-controls {
+    display: grid;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn,
+  .overlay {
+    transition: none;
+  }
+}

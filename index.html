@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jogo da Cobrinha</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=JetBrains+Mono:wght@400;600&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="crt-overlay" aria-hidden="true"></div>
+
+  <main class="arcade">
+    <header class="arcade__header">
+      <h1 class="arcade__title">JOGO DA <span>COBRINHA</span></h1>
+      <p class="arcade__subtitle">clássico &bull; coma e cresça</p>
+    </header>
+
+    <section class="hud">
+      <div class="hud__stat">
+        <span class="hud__label">Pontos</span>
+        <span class="hud__value" id="score">000</span>
+      </div>
+      <div class="hud__stat">
+        <span class="hud__label">Recorde</span>
+        <span class="hud__value" id="highScore">000</span>
+      </div>
+    </section>
+
+    <div class="board">
+      <canvas id="gameCanvas" width="400" height="400"></canvas>
+
+      <div class="overlay" id="startOverlay">
+        <p class="overlay__title">PRONTO?</p>
+        <p class="overlay__text">Use as setas ou WASD para mover</p>
+        <button class="btn" id="startBtn">COMEÇAR</button>
+      </div>
+
+      <div class="overlay overlay--hidden" id="gameOverOverlay">
+        <p class="overlay__title overlay__title--danger">FIM DE JOGO</p>
+        <p class="overlay__text" id="finalScoreText">Você fez 0 pontos</p>
+        <button class="btn" id="restartBtn">JOGAR DE NOVO</button>
+      </div>
+
+      <div class="overlay overlay--hidden" id="pauseOverlay">
+        <p class="overlay__title">PAUSADO</p>
+        <p class="overlay__text">Pressione espaço para continuar</p>
+      </div>
+    </div>
+
+    <p class="hint">setas / WASD para mover &middot; espaço para pausar</p>
+
+    <div class="touch-controls" id="touchControls">
+      <button class="touch-btn touch-btn--up" data-dir="up" aria-label="Mover para cima">▲</button>
+      <button class="touch-btn touch-btn--left" data-dir="left" aria-label="Mover para esquerda">◀</button>
+      <button class="touch-btn touch-btn--down" data-dir="down" aria-label="Mover para baixo">▼</button>
+      <button class="touch-btn touch-btn--right" data-dir="right" aria-label="Mover para direita">▶</button>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
